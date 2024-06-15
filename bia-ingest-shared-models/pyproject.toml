@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "bia-ingest-sm"
+version = "0.1.0"
+description = "BIA ingest using shared models"
+authors = ["Kola Babalola <kola@ebi.ac.uk>"]
+license = "Apache Software License 2.0"
+readme = "README.md"
+packages = [{include = "bia_ingest_sm"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+pydantic = {version = "^2", extras = ["email"]}
+pydantic-2-mermaid = "^0.7"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.22.1"
+pytest = "^8.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
