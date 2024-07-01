@@ -50,6 +50,24 @@ def get_affiliation(submission: Submission) -> Dict[str, semantic_models.Affilia
     return affiliation_dict
 
 
+def get_publication(submission: Submission) -> List[semantic_models.Publication]:
+    publication_sections = find_sections_recursive(submission.section, ["publication",], [])
+    key_mapping = [
+        ("doi", "DOI", None),
+        ("pubmed_id", "Pubmed ID", None),
+        ("author", "Authors", None),
+        ("release_date", "Year", None),
+        ("title", "Title", None),
+    ]
+    publications = []
+    for section in publication_sections:
+        attr_dict = attributes_to_dict(section.attributes)
+
+        model_dict = {k: attr_dict.get(v, default) for k, v, default in key_mapping}
+        publications.append(semantic_models.Publication.model_validate(model_dict))
+
+    return publications
+
 def get_contributor(submission: Submission) -> List[semantic_models.Contributor]:
     """ Map authors in submission to semantic_model.Contributors
 

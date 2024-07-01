@@ -9,6 +9,7 @@ from bia_ingest_sm import conversion
     (
         (utils.get_test_affiliation, conversion.get_affiliation,),
         (utils.get_test_contributor, conversion.get_contributor,),
+        (utils.get_test_publication, conversion.get_publication,),
         #(bia_data_model.Study, conversion.get_study_from_submission,),
     ),
 )

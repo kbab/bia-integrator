@@ -395,6 +395,24 @@ def get_test_contributor() -> Dict[str, semantic_models.Contributor]:
 
     return [contributor1, contributor2,]
 
+def get_test_publication() -> semantic_models.Publication:
+    publication1 = semantic_models.Publication.model_validate({
+        "pubmed_id": "38381674",
+        "title": "Test publication 1",
+        # TODO: No release date -> ST only collects Year
+        "release_date": "2024",
+        # TODO: Author is a string here.
+        "author": "Test Author11, Test Author12.",
+    })
+    publication2 = semantic_models.Publication.model_validate({
+        "pubmed_id": "38106175",
+        "doi": "10.1101/2023.12.07.570699",
+        "title": "Test publication 2",
+        # TODO: Author is a string here.
+        "author": "Test Author21, Test Author22",
+        "release_date": "2023",
+    })
+    return [publication1, publication2,]
 
 def get_template_study() -> bia_data_model.Study:
     contributor = get_template_contributor()
