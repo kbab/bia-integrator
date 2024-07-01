@@ -10,12 +10,13 @@ packages = [{include = "bia_ingest_sm"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.31.0"
-pydantic = {version = "^2", extras = ["email"]}
-pydantic-2-mermaid = "^0.7"
+#bia-shared-datamodels = { path = "../bia-shared-datamodels", develop = true }
+pytest = "^7.0"
+bia-shared-datamodels = {path = "../bia-shared-datamodels"}
+
 
 [tool.poetry.group.dev.dependencies]
 ipython = "^8.22.1"
-pytest = "^8.0.1"
 
 [build-system]
 requires = ["poetry-core"]
