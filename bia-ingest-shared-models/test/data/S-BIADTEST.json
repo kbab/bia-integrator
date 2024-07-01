@@ -44,7 +44,7 @@
     } ],
     "subsections" : [ {
       "type" : "author",
-      "accno" : "author0",
+      "accno" : "author1",
       "attributes" : [ {
         "name" : "Name",
         "value" : "Test Author1"
@@ -64,7 +64,7 @@
       } ]
     },{
       "type" : "Author",
-      "accno" : "author1",
+      "accno" : "author2",
       "attributes" : [ {
         "name" : "Name",
         "value" : "Test Author2"
@@ -95,6 +95,30 @@
       "attributes" : [ {
         "name" : "Name",
         "value" : "Test College 2"
+      } ]
+    }, {
+      "type" : "Publication",
+      "attributes" : [ {
+        "name" : "Pubmed ID",
+        "value" : "38381674"
+      }, {
+        "name" : "Title",
+        "value" : "Biomarker Changes during 20 Years Preceding Alzheimer's Disease."
+      }, {
+        "name" : "Authors",
+        "value" : "Jia J, Ning Y, Chen M, Wang S, Yang H, Li F, Ding J, Li Y, Zhao B, Lyu J, Yang S, Yan X, Wang Y, Qin W, Wang Q, Li Y, Zhang J, Liang F, Liao Z, Wang S."
+      }, {
+        "name" : "Year",
+        "value" : "2024"
+      } ]
+    }, {
+      "type" : "Publication",
+      "attributes" : [ {
+        "name" : "Title",
+        "value" : "Biomarker Changes during 20 Years Preceding Alzheimer's Disease."
+      }, {
+        "name" : "Authors",
+        "value" : "Author1, Author2"
       } ]
     }, {
       "type" : "Funding",

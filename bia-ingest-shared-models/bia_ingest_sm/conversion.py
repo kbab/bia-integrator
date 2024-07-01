@@ -1,6 +1,7 @@
 from typing import List, Any, Dict, Optional
 from .biostudies import Submission, attributes_to_dict, Section, Attribute
 from .shared_models import Study, Organisation, Agent 
+from src.bia_models import bia_data_model, semantic_models
 
 def get_study_from_submission(submission: Submission) -> Study:
     """Return an API study model populated from the submission
@@ -20,6 +21,62 @@ def get_study_from_submission(submission: Submission) -> Study:
     study = Study.model_validate(study_dict)
 
     return study
+
+def get_affiliation(submission: Submission) -> Dict[str, semantic_models.Affiliation]:
+    """Maps biostudies.Organisation sections to semantic_models.Affiliations
+
+    """
+
+    organisation_sections = find_sections_recursive(
+        submission.section, ["organisation", "organization"], []
+    )
+
+    key_mapping = [
+        ("display_name", "Name", None),
+        ("rorid", "RORID", None),
+        # TODO: Address does not exist in current biostudies.Organisation
+        ("address", "Address", None),
+        # TODO:  does not exist in current biostudies.Organisation
+        ("website", "Website", None),
+    ]
+
+    affiliation_dict = {}
+    for section in organisation_sections:
+        attr_dict = attributes_to_dict(section.attributes)
+
+        model_dict = {k: attr_dict.get(v, default) for k, v, default in key_mapping}
+        affiliation_dict[section.accno] = semantic_models.Affiliation.model_validate(model_dict)
+
+    return affiliation_dict
+
+
+def get_contributor(submission: Submission) -> List[semantic_models.Contributor]:
+    """ Map authors in submission to semantic_model.Contributors
+
+    """
+    affiliation_dict = get_affiliation(submission) 
+    key_mapping = [
+        ("display_name", "Name", None),
+        ("contact_email", "E-mail", "not@supplied.com"),
+        ("role", "Role", None),
+        ("orcid", "ORCID", None),
+        ("affiliation", "affiliation", []),
+    ]
+    author_sections = find_sections_recursive(submission.section, ["author",], [])
+    contributors = []
+    for section in author_sections:
+        attr_dict = mattributes_to_dict(section.attributes, affiliation_dict)
+        model_dict = {k: attr_dict.get(v, default) for k, v, default in key_mapping}
+        # TODO: Find out if authors can have more than one organisation ->
+        #       what are the implications for mattributes_to_dict?
+        if model_dict["affiliation"] is None:
+            model_dict["affiliation"] = []
+        elif type(model_dict["affiliation"]) is not list:
+            model_dict["affiliation"] = [model_dict["affiliation"],]
+        contributors.append(semantic_models.Contributor.model_validate(model_dict))
+
+    return contributors
+    
 
 def find_sections_recursive(
     section: Section, search_types: List[str], results: Optional[List[Section]] = []
@@ -50,7 +107,7 @@ def find_and_convert_authors(submission: Submission) -> List[Agent]:
 
     """
     organisation_sections = find_sections_recursive(
-        submission.section, ["organisation", "organization"]
+        submission.section, ["organisation", "organization"], []
     )
 
     key_mapping = [
@@ -77,7 +134,7 @@ def find_and_convert_authors(submission: Submission) -> List[Agent]:
         # TODO: Nowhere to store orcid in Agent. Need Person?
         #("orcid", "ORCID", None),
     ]
-    author_sections = find_sections_recursive(submission.section, ["author",])
+    author_sections = find_sections_recursive(submission.section, ["author",], [])
     authors = []
     for section in author_sections:
         attr_dict = mattributes_to_dict(section.attributes, organisation_dict)

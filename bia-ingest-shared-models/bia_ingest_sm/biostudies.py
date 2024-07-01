@@ -64,7 +64,7 @@ class Link(BaseModel):
 
 class Section(BaseModel):
     type: str
-    accno: Optional[str]
+    accno: Optional[str] = ""
     attributes: List[Attribute] = []
     subsections: List[Union["Section", List["Section"]]] = []
     links: List[Link] = []
