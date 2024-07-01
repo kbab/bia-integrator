@@ -144,7 +144,11 @@ class Publication(DocumentMixin):
     pubmed_id: Optional[str] = Field(
         None, description="""Identifier for journal articles/abstracts in PubMed"""
     )
-    doi: str = Field(description="""Digital Object Identifier (DOI)""")
+    doi: Optional[str] = Field(None, description="""Digital Object Identifier (DOI)""")
+    # Override DocumentMixin.release_date as biostudies.Submission.Publication only has year of publication
+    release_date: Optional[str] = Field(None, description="""Release date associated with publication. Not necessarily a well formatted date string""")
+    # Override DocumentMixin.Authors as biostudies.Submission.Publication imports just a string with author names
+    author: Optional[str] = Field(None, description="""Names of author(s)""")
 
 
 class ExternalReference(BaseModel):
